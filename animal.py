@@ -7,13 +7,13 @@ fave_animal = input("What is your favorite animal? ")
 print("Your favorite animal is the " + fave_animal + ".")
 
 # Test input: velociraptor
-test_fav_animal = "velociraptor"
+test_input = "velociraptor"
 
 # Test input: tardigrade
-test_fav_animal = "tardigrade"
+test_input = "tardigrade"
 
 # Test input: .
-test_fav_animal = "."
+test_input = "."
 
 # Test input: giant sloth
-test_fav_animal = "giant sloth"
+test_input = "giant sloth"
