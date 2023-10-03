@@ -21,8 +21,4 @@ print()
 
 # Ask the user for their favorite animal
 fave_animal = input("What is your favorite animal? ")
-
-if fave_animal:  # Check if the input is not empty
-    print("Your favorite animal is the " + fave_animal + ".")
-else:
-    print("You did not enter a favorite animal.")
+print("Your favorite animal is the " + fave_animal + ".")
