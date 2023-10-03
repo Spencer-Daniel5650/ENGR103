@@ -5,15 +5,3 @@
 
 fave_animal = input("Please enter your favorite animal: ")
 print("Your favorite animal is the " + fave_animal + ".")
-
-# Test input: velociraptor
-test_input = "velociraptor"
-
-# Test input: tardigrade
-test_input = "tardigrade"
-
-# Test input: .
-test_input = "."
-
-# Test input: giant sloth
-test_input = "giant sloth"
