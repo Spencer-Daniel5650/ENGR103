@@ -1,7 +1,7 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
 # Date: 10/01/2023
-# Description: Tests different inputs and prints the results before asking for the user's favorite animal.
+# Discription: Asks the user for their favorite animal and then prints out that that is their favorite animal
 
 fave_animal = input("What is your favorite animal? ")
 print("Your favorite animal is the " + fave_animal + ".")
