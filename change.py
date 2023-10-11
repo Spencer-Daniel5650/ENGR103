@@ -4,9 +4,7 @@
 # Description: Asks user to input dollar amount under a dollar then prints breakdown of change in quarters, nickels, dimes and pennies
 
 cents = int(input("Please enter an amount in cents less than a dollar:\n"))
-
 # Calculations for each coin
-
 quarters = cents // 25
 cents %= 25
 
