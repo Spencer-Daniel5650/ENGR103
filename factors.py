@@ -1,7 +1,7 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
 # Date: 10/17/2023
-# Description: Asks user for input of integers then evaluates min and max of input
+# Description: Asks user for input of integer then returns factors of input integer
 
 # Ask the user to enter a positive integer
 user_input = input("Please enter a positive integer: ")
