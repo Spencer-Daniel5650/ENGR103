@@ -3,22 +3,23 @@
 # Date: 10/17/2023
 # Description: Asks user for input of integers then evaluates min and max of input
 
-# Ask the user how many integers they would like to enter
-num_integers = int(input("How many integers would you like to enter?\n"))
+# Ask the user to enter a positive integer
+user_input = input("Please enter a positive integer: ")
+num = int(user_input)
 
-# Initialize variables to hold the minimum and maximum values
-integers = []
+# Validate if the input is a positive integer
+if num <= 0:
+    print("Please enter a valid positive integer.")
+else:
+    # Initialize a list to store the factors
+    factors = []
 
-# Prompt the user to enter the integers
-print(f"Please enter {num_integers} integers:")
-for i in range(num_integers):
-    num = int(input())
-    integers.append(num)
+    # Find the factors of the entered number
+    for i in range(1, num + 1):
+        if num % i == 0:
+            factors.append(i)
 
-# Calculate the minimum and maximum values
-min_value = min(integers)
-max_value = max(integers)
-
-# Display the minimum and maximum values
-print(f"min: {min_value}")
-print(f"max: {max_value}")
+    # Print the list of factors
+    print("The factors of", num, "are:")
+    for factor in factors:
+        print(factor)
