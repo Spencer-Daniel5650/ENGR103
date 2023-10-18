@@ -26,6 +26,6 @@ while True:
             print(f"You guessed it in {num_guesses} tries.")
         break
     elif user_guess > target_integer:
-        print("Too high - try again:")
+        print("too high - try again:")
     else:
-        print("Too low - try again:")
+        print("too low - try again:")
