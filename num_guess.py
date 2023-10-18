@@ -1,7 +1,9 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
 # Date: 10/17/2023
-# Description:
+# Description: asks user to enter integer then begins guessing game
+# Ask the user to enter the target integer for guessing
+
 # Ask the user to enter the target integer for guessing
 target_integer = int(input("Enter the integer for the player to guess.\n"))
 
@@ -9,13 +11,13 @@ target_integer = int(input("Enter the integer for the player to guess.\n"))
 num_guesses = 0
 user_guess = None
 
+# Prompt the user for their initial guess
+user_input = input("Enter your guess.\n")
+user_guess = int(user_input)
+
 # Start the guessing loop
 while True:
-    # Prompt the user for their guess
-    user_input = input("Enter your guess.\n")
-    user_guess = int(user_input)
-
-    # number of guesses
+    # Increment the number of guesses
     num_guesses += 1
 
     # Check if the guess is correct
@@ -26,6 +28,10 @@ while True:
             print(f"You guessed it in {num_guesses} tries.")
         break
     elif user_guess > target_integer:
-        print("too high - try again:")
+        print("Too high - try again:")
     else:
-        print("too low - try again:")
+        print("Too low - try again:")
+
+    # Prompt the user for their next guess
+    user_input = input()
+    user_guess = int(user_input)
