@@ -7,19 +7,17 @@
 num_integers = int(input("How many integers would you like to enter?\n"))
 
 # Initialize variables to hold the minimum and maximum values
-min_value = None
-max_value = None
+integers = []
 
 # Prompt the user to enter the integers
 print(f"Please enter {num_integers} integers:")
 for i in range(num_integers):
     num = int(input())
+    integers.append(num)
 
-    # Update the minimum and maximum values
-    if min_value is None or num < min_value:
-        min_value = num
-    if max_value is None or num > max_value:
-        max_value = num
+# Calculate the minimum and maximum values
+min_value = min(integers)
+max_value = max(integers)
 
 # Display the minimum and maximum values
 print(f"min: {min_value}")
