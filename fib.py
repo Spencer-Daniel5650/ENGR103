@@ -15,7 +15,6 @@ def test_fib(n):
             fib_prev, fib_current = fib_current, fib_next
         return fib_current
 
-print(test_fib(n))
 
 
 
