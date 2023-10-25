@@ -1,7 +1,7 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
 # Date: 10/23/2023
-Description: creates a hailstone sequence based off of a function named hailstone that uses initail positive integer
+#Description: creates a hailstone sequence based off of a function named hailstone that uses initail positive integer
 
 def hailstone(n):
     if n == 1:
