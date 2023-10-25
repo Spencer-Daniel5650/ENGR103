@@ -3,6 +3,7 @@
 # Date: 10/23/2023
 # Description: Creates a function named fib that takes positive integer and returns the numerical location it resides in the fibonacci sequence.
 
+import unittest
 def fib(n):
     if n <= 0:
         return None  # Handle invalid input
