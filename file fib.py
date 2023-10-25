@@ -14,8 +14,8 @@ def fib(n):
             fib_next = fib_prev + fib_current
             fib_prev, fib_current = fib_current, fib_next
         return fib_current
-
- fib(n)
+n = 10
+fib(n)
 
 
 
