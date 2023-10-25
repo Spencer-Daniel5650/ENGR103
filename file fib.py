@@ -15,11 +15,8 @@ def fib(n):
             fib_prev, fib_current = fib_current, fib_next
         return fib_current
 
-# Call the fib function to calculate the nth Fibonacci number
-n = 10  # Replace with the desired position in the Fibonacci sequence
-term = fib(n)
+ fib(n)
 
-print(term)
 
 
 
