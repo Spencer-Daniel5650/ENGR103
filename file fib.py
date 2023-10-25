@@ -4,14 +4,22 @@
 # Description: Creates a function named fib that takes positive integer and returns the numerical location it resides in the fibonacci sequence.
 
 def fib(n):
-    if n <= 2:
+    fib_prev = 1
+    fib_current = 1
+
+    if n == 1 or n == 2:
         return 1
     else:
-        a, b = 1, 1
         for _ in range(3, n + 1):
-            a, b = b, a + b
-        return b
-fib(2)
+            fib_next = fib_prev + fib_current
+            fib_prev, fib_current = fib_current, fib_next
+        return fib_current
+
+# Call the fib function to calculate the nth Fibonacci number
+n = 10  # Replace with the desired position in the Fibonacci sequence
+term = fib(n)
+
+print(term)
 
 
 
