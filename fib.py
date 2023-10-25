@@ -14,7 +14,7 @@ def test_fib(n):
             fib_next = fib_prev + fib_current
             fib_prev, fib_current = fib_current, fib_next
         return fib_current
-n = 10
+
 print(test_fib(n))
 
 
