@@ -11,10 +11,8 @@ def fib(n):
         for _ in range(3, n + 1):
             a, b = b, a + b
         return b
+fib(2)
 
-
-term = fib(2)
-print(term)
 
 
 
