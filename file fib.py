@@ -4,7 +4,6 @@
 # Description: Creates a function named fib that takes positive integer and returns the numerical location it resides in the fibonacci sequence.
 
 import unittest
-
 def fib(n):
     if n <= 0:
         return 0
@@ -26,4 +25,3 @@ class TestFib(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
