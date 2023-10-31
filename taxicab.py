@@ -1,3 +1,8 @@
+# Author: Daniel Spencer
+# GitHub Username: Spencer-Daniel5650
+# Date: 10/28/2023
+# Description: The code defines a simplified representation of a taxicab on a 2D grid using a dictionary, providing functions to move the cab and retrieve its position and total distance traveled.
+
 def Taxicab(x, y):
     """Defines the Taxicab class."""
     cab = {"x": x, "y": y, "odometer": 0}
