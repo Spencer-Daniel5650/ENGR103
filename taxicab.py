@@ -3,36 +3,49 @@
 # Date: 10/28/2023
 # Description: The code defines a simplified representation of a taxicab on a 2D grid using a dictionary, providing functions to move the cab and retrieve its position and total distance traveled.
 
-def Taxicab(x, y):
-    """Defines the Taxicab class."""
-    cab = {"x": x, "y": y, "odometer": 0}
-    return cab
+class Taxicab:
+    """
+    Represents a Taxicab in a 2D grid with an odometer to measure the distance traveled.
+    """
 
-def get_x_coord(cab):
-    """Returns the x-coordinate of the cab."""
-    return cab["x"]
+    def __init__(self, x_coord, y_coord):
+        """
+        Initializes the Taxicab with given x and y coordinates, and sets the odometer to zero.
+        """
+        self._x_coord = x_coord
+        self._y_coord = y_coord
+        self._odometer = 0
 
-def get_y_coord(cab):
-    """Returns the y-coordinate of the cab."""
-    return cab["y"]
+    def get_x_coord(self):
+        """
+        Returns the x-coordinate of the Taxicab.
+        """
+        return self._x_coord
 
-def get_odometer(cab):
-    """Returns the odometer reading of the cab."""
-    return cab["odometer"]
+    def get_y_coord(self):
+        """
+        Returns the y-coordinate of the Taxicab.
+        """
+        return self._y_coord
 
-def move_x(cab, distance):
-    """Moves the cab in the x direction."""
-    cab["x"] += distance
-    cab["odometer"] += abs(distance)
+    def get_odometer(self):
+        """
+        Returns the odometer reading of the Taxicab.
+        """
+        return self._odometer
 
-def move_y(cab, distance):
-    """Moves the cab in the y direction."""
-    cab["y"] += distance
-    cab["odometer"] += abs(distance)
+    def move_x(self, distance):
+        """
+        Moves the Taxicab left or right based on the provided distance.
+        """
+        self._x_coord += distance
+        self._odometer += abs(distance)
 
-# Example usage:
-cab = Taxicab(5, -8)
-move_x(cab, 3)
-move_y(cab, -4)
-move_x(cab, -1)
-print(get_odometer(cab))
+    def move_y(self, distance):
+        """
+        Moves the Taxicab up or down based on the provided distance.
+        """
+        self._y_coord += distance
+        self._odometer += abs(distance)
+
+
