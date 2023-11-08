@@ -6,16 +6,16 @@
 class Person:
     def __init__(self, name, age):
         """
-        Initialize the private data members for name and age.
+        Initialize the protected data members for name and age.
         """
-        self.__name = name  # private member for name
-        self.__age = age    # private member for age
+        self._name = name  # protected member for name
+        self._age = age    # protected member for age
 
     def get_age(self):
         """
         Return the age of the person.
         """
-        return self.__age
+        return self._age
 
 def std_dev(person_list):
     """
@@ -31,3 +31,6 @@ def std_dev(person_list):
     variance = sum((person.get_age() - mean_age) ** 2 for person in person_list) / len(person_list)
     # Return the square root of variance, which is the standard deviation
     return variance ** 0.5
+
+
+
