@@ -1,27 +1,28 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
-# Date: 11/06/2023
-# Description: The find_median function sorts a given list of numbers and returns the median value, or None if the list is empty.
+# Date: 10/23/2023
+# Description: Finds the median of numbers
 
 def find_median(numbers):
     """
-    Sort the list and return the median of the numbers.
-    If the list is empty, return None.
+    Find the median of a list of numbers.
+
+    :param numbers: A list of numbers.
+    :return: The median of the numbers, or None if the list is empty.
     """
-    if not numbers:  # If the list is empty
+    if not numbers:  # Check if the list is empty
         return None
 
-    numbers.sort()  # Sort the list in place
-    n = len(numbers)
-    middle = n // 2  # Find the middle index
+    sorted_numbers = sorted(numbers)  # Sort the list
+    n = len(sorted_numbers)
 
-    if n % 2 == 0:  # If the list has an even number of elements
+    if n % 2 == 0:  # Even number of elements
         # The median is the average of the two middle numbers
-        return (numbers[middle - 1] + numbers[middle]) / 2
-    else:  # If the list has an odd number of elements
+        return (sorted_numbers[n//2 - 1] + sorted_numbers[n//2]) / 2
+    else:  # Odd number of elements
         # The median is the middle number
-        return numbers[middle]
+        return sorted_numbers[n//2]
 
 # Example usage:
-values = [13, 7, -3, 82, 4]
-result = find_median(values)  # result should be 7
+# numbers_list = [3, 1, 4, 1, 5, 9, 2]
+# print(find_median(numbers_list))
