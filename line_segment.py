@@ -35,7 +35,22 @@ class LineSegment:
     def slope(self):
         dx = self._endpoint_2.get_x_coord() - self._endpoint_1.get_x_coord()
         dy = self._endpoint_2.get_y_coord() - self._endpoint_1.get_y_coord()
-        return dy / dx if dx != 0 else float('inf')
+
+        # Handling the case where the line segment is vertical or the endpoints are the same
+        if dx == 0:
+            return None
+        return dy / dx
 
     def is_parallel_to(self, other):
-        return abs(self.slope() - other.slope()) < 0.000001
+        slope_self = self.slope()
+        slope_other = other.slope()
+
+        # Handling the case where one or both line segments are vertical
+        if slope_self is None and slope_other is None:
+            return True
+        if slope_self is None or slope_other is None:
+            return False
+
+        return abs(slope_self - slope_other) < 0.000001
+
+
