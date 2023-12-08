@@ -1,6 +1,6 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
-# Date: 10/23/2023
+# Date: 12/6/2023
 # Description: represent movies, manage their catalog in streaming services, and guide users to find which service streams a particular movie.
 
 class Movie:
