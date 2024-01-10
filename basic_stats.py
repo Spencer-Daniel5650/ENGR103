@@ -1,6 +1,6 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
-# Date: 10/08/2023
+# Date: 01/10//2024
 # Description: Calculates mean, median, and mode of grades from student objects
 
 import statistics
