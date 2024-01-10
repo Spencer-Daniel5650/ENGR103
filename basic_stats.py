@@ -22,10 +22,10 @@ def basic_stats(students):
 
 # Example usage
 students = [
-    Student("Alice", 90),
-    Student("Bob", 85),
-    Student("Charlie", 90),
-    Student("Diana", 85)
+    Student("John", 92),
+    Student("Chris", 83),
+    Student("Steve", 99),
+    Student("Doe", 87)
 ]
 
 stats = basic_stats(students)
