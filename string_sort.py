@@ -3,28 +3,33 @@
 # Date: 1/23/2024
 # Description: Sorts a list of strings in place, ignoring case sensitivity.
 
-def string_sort(strings):
-    """
-    Sorts a list of strings in place, ignoring case sensitivity.
+# Function to do insertion sort
+def insertionSort(arr):
 
-    This function implements the insertion sort algorithm, modified to sort strings.
-    It sorts the list in a case-insensitive manner but maintains the original case of the strings.
+    # Start from the second element and go till the end
+    for i in range(1, len(arr)):
 
-    """
-    for i in range(1, len(strings)):
-        key = strings[i]
-        j = i - 1
+        key = arr[i]	# Current element
 
-        # Compare key with each element on the left of it until an element smaller than it is found
-        # For a case insensitive comparison, convert both strings to lowercase
-        while j >= 0 and strings[j].lower() > key.lower():
-            strings[j + 1] = strings[j]
-            j -= 1
+        j = i-1		# Index just before the current i
 
-        # Place key at after the element just smaller than itself.
-        strings[j + 1] = key
+	# Try till the first element
+	# Compare element at j and element at i
+	# Copy the j'th element if it is smaller than the i'th
 
-# Example usage
-strings = ["Zebra", "apple", "maRker", "marble"]
-string_sort(strings)
-print(strings)  # The list should now be sorted in case-insensitive order
+        # here we will compare string ignoring-case. (Convert it to lower-case)
+        while j >= 0 and key.lower() < arr[j].lower() :
+                arr[j + 1] = arr[j]
+                j -= 1
+
+	# Copy the curernt i'th element
+        arr[j + 1] = key
+
+
+# Driver code
+
+# Set some randome values in the list
+arr = ["apple", "maRker", "marble", "zebra", "ball"]
+
+insertionSort(arr)
+
