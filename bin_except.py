@@ -3,31 +3,24 @@
 # Date: 1/23/2024
 # Description: Creates a binary search and returns an exception when target is not found
 
-def binary_search(a_list, target):
-  """
-  Searches a_list for an occurrence of target
-  If found, returns the index of its position in the list
-  If not found, returns -1, indicating the target value isn't in the list
-  """
+class TargetNotFound(Exception):
+    """Exception raised when the target is not found in the list."""
+    pass
 
-  class TargetNotFound(Exception):
-      """Exception raised when the target is not found in the list."""
+def bin_except(arr, target):
+    low = 0
+    high = len(arr) - 1
 
-      def __init__(self, message="Target value not found in the list"):
-          self.message = message
-          super().__init__(self.message)
+    while low <= high:
+        mid = (low + high) // 2
+        guess = arr[mid]
+        if guess == target:
+            return mid
+        if guess < target:
+            low = mid + 1
+        else:
+            high = mid - 1
 
-  def binary_search(a_list, target):
-      first = 0
-      last = len(a_list) - 1
+    raise TargetNotFound(f"Target {target} not found in the list.")
 
-      while first <= last:
-          middle = (first + last) // 2
-          if a_list[middle] == target:
-              return middle
-          elif a_list[middle] > target:
-              last = middle - 1
-          else:
-              first = middle + 1
 
-      raise TargetNotFound
