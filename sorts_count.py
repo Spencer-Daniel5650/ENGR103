@@ -5,6 +5,11 @@
 # sort algorithm and returns the number of element comparisons and swaps made
 
 def bubble_count(lst):
+    """
+        Perform bubble sort on a list and count the number of comparisons and exchanges made.
+        Returns:
+        tuple: A tuple containing two integers - the number of comparisons and the number of exchanges.
+        """
     n = len(lst)
     comparisons = 0
     exchanges = 0
