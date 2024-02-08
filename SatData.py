@@ -6,34 +6,33 @@
 import json
 
 class SatData:
-    def __init__(self, filename):
-        # Load the JSON data
-        with open(filename, 'r') as file:
-            self.__data = json.load(file)
+    def __init__(self):
+        with open('sat.json', 'r') as file:
+            self.data = json.load(file)
 
-    def save_as_csv(self, dbns):
-        # Column headers hardcoded based on the provided description and example
-        column_headers = ["DBN", "SCHOOL NAME", "NUM OF SAT TEST TAKERS", "SAT CRITICAL READING AVG. SCORE", "SAT MATH AVG. SCORE", "SAT WRITING AVG. SCORE"]
-        rows = [",".join(column_headers)]  # Start with headers
+    def save_as_csv(self, DBNS):  # Use DBNS parameter instead of dbns
+        # Sort DBNs in ascending order
+        DBNS.sort()  # Correct case for the parameter
 
-        # Sort the data by DBN to ensure output is in ascending order
-        sorted_data = sorted([school for school in self.__data if school["DBN"] in dbns], key=lambda x: x["DBN"])
+        # Open output file for writing
+        with open('output.csv', 'w') as file:
+            # Write column headers
+            file.write('DBN,SCHOOL NAME,Num of SAT Test Takers,SAT Critical Reading Avg. Score,SAT Math Avg. Score,SAT Writing Avg. Score\n')
 
-        # Construct CSV rows
-        for school in sorted_data:
-            row = []
-            for header in column_headers:
-                # Handle commas in school names
-                value = str(school[header])
-                if "," in value:
-                    value = f'"{value}"'  # Enclose in double quotes
-                row.append(value)
-            rows.append(",".join(row))
+            # Write rows corresponding to DBNs in the list
+            for row in self.data:
+                if row['DBN'] in DBNS:  # Use DBNS parameter instead of dbns
+                    # Format row values as CSV string
+                    csv_row = '{},{},{},{},{},{}\n'.format(
+                        row['DBN'],
+                        '"' + row['SCHOOL NAME'] + '"',  # Enclose name in double quotes
+                        row['Num of SAT Test Takers'],
+                        row['SAT Critical Reading Avg. Score'],
+                        row['SAT Math Avg. Score'],
+                        row['SAT Writing Avg. Score']
+                    )
+                    file.write(csv_row)
 
-        # Write to CSV file
-        with open("output.csv", 'w') as file:
-            file.write("\n".join(rows))
-
-# Example usage:
-# sat_data = SatData("sat.json")
-# sat_data.save_as_csv(["02M047", "21K410"])  # Example DBNs
+sd = SatData()
+dbns = ["02M303", "02M294", "01M450", "02M418"]
+sd.save_as_csv(dbns)
