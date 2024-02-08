@@ -1,7 +1,7 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
 # Date: 2/7/2024
-# Description:Nobel Prize data from a JSON file,
+# Description: Nobel Prize data from a JSON file,
 # providing functionality to search and return a sorted list of laureates' surnames for specified year and category.
 
 import json
