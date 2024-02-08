@@ -4,13 +4,18 @@
 # Description:
 
 import json
+import csv
+
+
 class SatData:
     def __init__(self, filename='sat.json'):
-        # Private data member to store SAT data
-        self.__data = []
+        self.__data = []  # Private data member to store SAT data
         try:
             with open(filename, 'r') as file:
-                self.__data = json.load(file)
+                # Load the JSON data; assuming the top-level structure is a list
+                data_loaded = json.load(file)
+                # If the data is nested, adjust accordingly here
+                self.__data = data_loaded if isinstance(data_loaded, list) else []
         except FileNotFoundError:
             print(f'File {filename} not found.')
 
@@ -23,16 +28,15 @@ class SatData:
 
         # Write to CSV
         with open('output.csv', 'w', newline='') as file:
-            csv_writer = csv.writer(file)
-            # Assuming you know the headers or extract from the first item if list is not empty
-            headers = ['dbn', 'school_name', 'num_of_sat_test_takers', 'sat_critical_reading_avg_score',
-                       'sat_math_avg_score', 'sat_writing_avg_score'] if sorted_data else []
-            csv_writer.writerow(headers)
+            if sorted_data:
+                csv_writer = csv.writer(file)
+                # Extract headers from the first item, assuming all items have the same structure
+                headers = list(sorted_data[0].keys())
+                csv_writer.writerow(headers)
 
-            for entry in sorted_data:
-                row = [entry.get(header, '') for header in headers]
-                csv_writer.writerow(row)
+                for entry in sorted_data:
+                    row = [entry.get(header, '') for header in headers]
+                    csv_writer.writerow(row)
+            else:
+                print("No matching DBNs found in the data.")
 
-# Example usage
-# sat_data = SatData()
-# sat_data.save_as_csv(['01M292', '02M294'])  # Example DBNs
