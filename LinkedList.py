@@ -4,100 +4,193 @@
 # Description:
 
 class Node:
-    """A Node class for LinkedList that stores data and a reference to the next node."""
-    def __init__(self, data):
-        """Initialize a new node with the given data and no next node."""
-        self.data = data
+    """Represents a node in a linked list.
+
+    Attributes:
+        data: The value stored in the node.
+        next: The next node in the linked list, or None if this is the last node.
+    """
+
+    def __init__(self, value):
+        """Initializes a Node with a given value.
+
+        Args:
+            value: The value to be stored in the node.
+        """
+        self.data = value
         self.next = None
 
 
 class LinkedList:
-    """LinkedList class with recursive methods for linked list manipulation."""
+    """Represents a singly linked list.
+
+    Attributes:
+        _head: The head node of the linked list, or None if the list is empty.
+    """
+
     def __init__(self):
-        """Initialize a LinkedList with a private head node."""
-        self.__head = None
+        """Initializes an empty linked list."""
+        self._head = None
 
     def get_head(self):
-        """Return the head of the list."""
-        return self.__head
+        """Returns the head node of the list.
 
-    def add(self, value, current=None):
-        """Add a value to the end of the list recursively."""
-        if current is None:
-            if self.__head is None:
-                self.__head = Node(value)
-                return
-            else:
-                self.add(value, self.__head)
-                return
-        if current.next is None:
-            current.next = Node(value)
+        Returns:
+            The head node of the linked list.
+        """
+        return self._head
+
+    def add(self, value):
+        """Adds a new node with the given value to the end of the list.
+
+        Args:
+            value: The value to add to the list.
+        """
+        if self._head is None:
+            self._head = Node(value)
         else:
-            self.add(value, current.next)
+            self.rec_add(value, self._head)
 
-    def remove(self, value, current=None, previous=None):
-        """Remove the first occurrence of value in the list recursively."""
-        if current is None:
-            current = self.__head
-        if current:
-            if current.data == value:
-                if previous is None:
-                    self.__head = current.next
-                else:
-                    previous.next = current.next
-                return True
-            return self.remove(value, current.next, current)
-        return False
+    def rec_add(self, value, current_node):
+        """Recursively adds a new node with the given value to the end of the list.
 
-    def contains(self, value, current=None):
-        """Check if the list contains the value recursively."""
-        if current is None:
-            current = self.__head
-        if current:
-            if current.data == value:
-                return True
-            return self.contains(value, current.next)
-        return False
-
-    def insert(self, value, index, current=None, counter=0):
-        """Insert value at the specified index in the list recursively."""
-        if current is None:
-            current = self.__head
-            if index == 0 or not current:
-                new_node = Node(value)
-                new_node.next = current
-                self.__head = new_node
-                return
+        Args:
+            value: The value to add to the list.
+            current_node: The current node being examined in the recursion.
+        """
+        if current_node.next is None:
+            current_node.next = Node(value)
         else:
-            if counter + 1 == index or not current.next:
-                new_node = Node(value)
-                new_node.next = current.next
-                current.next = new_node
-                return
-            self.insert(value, index, current.next, counter + 1)
+            self.rec_add(value, current_node.next)
 
-    def reverse(self, current=None, previous=None):
-        """Reverse the list recursively without changing node data."""
-        if current is None:
-            current = self.__head
-        if current is None:
-            return
-        next_node = current.next
-        current.next = previous
-        if next_node is None:
-            self.__head = current
-            return
-        self.reverse(next_node, current)
+    def remove(self, value):
+        """Removes the first occurrence of a node with the given value from the list.
 
-    def to_plain_list(self, current=None):
-        """Create a plain Python list from the linked list recursively."""
-        if current is None:
-            current = self.__head
-        if current is None:
+        Args:
+            value: The value to remove from the list.
+        """
+        if self._head is None:
+            return
+        if self._head.data == value:
+            self._head = self._head.next
+        else:
+            self.rec_remove(value, self._head)
+
+    def rec_remove(self, value, current_node):
+        """Recursively removes the first occurrence of a node with the given value from the list.
+
+        Args:
+            value: The value to remove from the list.
+            current_node: The current node being examined in the recursion.
+        """
+        if current_node.next is None:
+            return
+        if current_node.next.data == value:
+            current_node.next = current_node.next.next
+        else:
+            self.rec_remove(value, current_node.next)
+
+    def contains(self, value):
+        """Checks if the list contains a node with the given value.
+
+        Args:
+            value: The value to search for in the list.
+
+        Returns:
+            True if the list contains a node with the value, False otherwise.
+        """
+        return self.rec_contains(value, self._head)
+
+    def rec_contains(self, value, current_node):
+        """Recursively checks if the list contains a node with the given value.
+
+        Args:
+            value: The value to search for in the list.
+            current_node: The current node being examined in the recursion.
+
+        Returns:
+            True if the current node or any node after it contains the value, False otherwise.
+        """
+        if current_node is None:
+            return False
+        elif current_node.data == value:
+            return True
+        else:
+            return self.rec_contains(value, current_node.next)
+
+    def insert(self, value, index):
+        """Inserts a new node with the given value at the specified index in the list.
+
+        Args:
+            value: The value to insert into the list.
+            index: The index at which to insert the new node.
+        """
+        if index == 0:
+            new_node = Node(value)
+            new_node.next = self._head
+            self._head = new_node
+        else:
+            self.rec_insert(value, index, self._head)
+
+    def rec_insert(self, value, index, current_node):
+        """Recursively inserts a new node with the given value at the specified index in the list.
+
+        Args:
+            value: The value to insert into the list.
+            index: The index at which to insert the new node, relative to the current node.
+            current_node: The current node being examined in the recursion.
+        """
+        if current_node is None:
+            return
+        elif index == 1:
+            new_node = Node(value)
+            new_node.next = current_node.next
+            current_node.next = new_node
+        else:
+            self.rec_insert(value, index-1, current_node.next)
+
+    def reverse(self):
+        """Reverses the linked list in place."""
+        if self._head is None or self._head.next is None:
+            return
+        else:
+            self.rec_reverse(self._head, None)
+
+    def rec_reverse(self, current_node, prev_node):
+        """Recursively reverses the linked list.
+
+        Args:
+            current_node: The current node being examined in the recursion.
+            prev_node: The previous node in the recursion, or None if current_node is the head.
+        """
+        if current_node is None:
+            self._head = prev_node
+        else:
+            next_node = current_node.next
+            current_node.next = prev_node
+            self.rec_reverse(next_node, current_node)
+
+    def to_plain_list(self):
+        """Converts the linked list to a plain Python list.
+
+        Returns:
+            A list containing the values of the nodes in the linked list.
+        """
+        if self._head is None:
             return []
         else:
-            return [current.data] + self.to_plain_list(current.next)
+            return [self._head.data] + self.rec_to_plain_list(self._head.next)
 
+    def rec_to_plain_list(self, current_node):
+        """Recursively converts the linked list to a plain Python list.
 
+        Args:
+            current_node: The current node being examined in the recursion.
 
-
+        Returns:
+            A list containing the values of the current node and all nodes after it in the list.
+        """
+        if current_node is None:
+            return []
+        else:
+            return [current_node.data] + self.rec_to_plain_list(current_node.next)
