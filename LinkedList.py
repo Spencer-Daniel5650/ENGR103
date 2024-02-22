@@ -60,21 +60,22 @@ class LinkedList:
 
     def insert(self, value, index, current=None, counter=0):
         """Insert value at the specified index in the list recursively."""
+        if index == 0:
+            new_node = Node(value)
+            new_node.next = self.__head
+            self.__head = new_node
+            return
         if current is None:
             current = self.__head
-            if index == 0:
-                self.__head = Node(value)
-                self.__head.next = current
-                return
+        elif counter == index - 1:
+            new_node = Node(value)
+            new_node.next = current.next
+            current.next = new_node
+            return
+        elif current.next is None and counter < index - 1:
+            current.next = Node(value)  # Insert at the end if index is out of bounds
+            return
         else:
-            if counter == index - 1:
-                new_node = Node(value)
-                new_node.next = current.next
-                current.next = new_node
-                return
-            elif current.next is None and counter < index - 1:
-                current.next = Node(value)  # Insert at the end if index is out of bounds
-                return
             self.insert(value, index, current.next, counter + 1)
 
     def reverse(self, current=None, previous=None):
@@ -95,7 +96,7 @@ class LinkedList:
         """Create a plain Python list from the linked list recursively."""
         if current is None:
             current = self.__head
-            return [] if current is None else self.to_plain_list(current)
-        else:
-            return [current.data] + self.to_plain_list(current.next)
+        if current is None:
+            return []
+        return [current.data] + self.to_plain_list(current.next)
 
