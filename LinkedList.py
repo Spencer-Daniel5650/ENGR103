@@ -1,3 +1,8 @@
+# Author: Daniel Spencer
+# GitHub Username: Spencer-Daniel5650
+# Date: 2/21/2024
+# Description:
+
 class Node:
     """A Node class for LinkedList that stores data and a reference to the next node."""
     def __init__(self, data):
@@ -92,4 +97,7 @@ class LinkedList:
             return []
         else:
             return [current.data] + self.to_plain_list(current.next)
+
+
+
 
