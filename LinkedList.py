@@ -25,10 +25,13 @@ class LinkedList:
     def add(self, value, current=None):
         """Add a value to the end of the list recursively."""
         if current is None:
-            current = self.__head
-        if current is None:
-            self.__head = Node(value)
-        elif current.next is None:
+            if self.__head is None:
+                self.__head = Node(value)
+                return
+            else:
+                self.add(value, self.__head)
+                return
+        if current.next is None:
             current.next = Node(value)
         else:
             self.add(value, current.next)
@@ -44,8 +47,7 @@ class LinkedList:
                 else:
                     previous.next = current.next
                 return True
-            else:
-                return self.remove(value, current.next, current)
+            return self.remove(value, current.next, current)
         return False
 
     def contains(self, value, current=None):
@@ -60,31 +62,27 @@ class LinkedList:
 
     def insert(self, value, index, current=None, counter=0):
         """Insert value at the specified index in the list recursively."""
-        if index == 0:
-            new_node = Node(value)
-            new_node.next = self.__head
-            self.__head = new_node
-            return
         if current is None:
             current = self.__head
-        elif counter == index - 1:
-            new_node = Node(value)
-            new_node.next = current.next
-            current.next = new_node
-            return
-        elif current.next is None and counter < index - 1:
-            current.next = Node(value)  # Insert at the end if index is out of bounds
-            return
+            if index == 0:
+                new_node = Node(value)
+                new_node.next = current
+                self.__head = new_node
+                return
         else:
+            if counter + 1 == index:
+                new_node = Node(value)
+                new_node.next = current.next
+                current.next = new_node
+                return
             self.insert(value, index, current.next, counter + 1)
 
     def reverse(self, current=None, previous=None):
         """Reverse the list recursively without changing node data."""
         if current is None:
             current = self.__head
-            if current is None:
-                return
-            self.__head = None
+        if current is None:
+            return
         next_node = current.next
         current.next = previous
         if next_node is None:
@@ -98,5 +96,6 @@ class LinkedList:
             current = self.__head
         if current is None:
             return []
-        return [current.data] + self.to_plain_list(current.next)
+        else:
+            return [current.data] + self.to_plain_list(current.next)
 
