@@ -4,14 +4,16 @@
 # Description:The code implements a recursive LinkedList class with methods
 # for manipulation and conversion to a Python list
 
-class LinkedList:
-    class Node:
-        """A Node class for LinkedList that stores data and a reference to the next node."""
-        def __init__(self, data):
-            """Initialize a new node with the given data and no next node."""
-            self.data = data
-            self.next = None
+class Node:
+    """A Node class for LinkedList that stores data and a reference to the next node."""
+    def __init__(self, data):
+        """Initialize a new node with the given data and no next node."""
+        self.data = data
+        self.next = None
 
+
+class LinkedList:
+    """LinkedList class with recursive methods for linked list manipulation."""
     def __init__(self):
         """Initialize a LinkedList with a private head node."""
         self.__head = None
@@ -25,9 +27,9 @@ class LinkedList:
         if current is None:
             current = self.__head
         if current is None:
-            self.__head = self.Node(value)
+            self.__head = Node(value)
         elif current.next is None:
-            current.next = self.Node(value)
+            current.next = Node(value)
         else:
             self.add(value, current.next)
 
@@ -61,17 +63,17 @@ class LinkedList:
         if current is None:
             current = self.__head
             if index == 0:
-                self.__head = self.Node(value)
+                self.__head = Node(value)
                 self.__head.next = current
                 return
         else:
             if counter == index - 1:
-                new_node = self.Node(value)
+                new_node = Node(value)
                 new_node.next = current.next
                 current.next = new_node
                 return
             elif current.next is None and counter < index - 1:
-                current.next = self.Node(value)  # Insert at the end if index is out of bounds
+                current.next = Node(value)  # Insert at the end if index is out of bounds
                 return
             self.insert(value, index, current.next, counter + 1)
 
