@@ -1,9 +1,3 @@
-# Author: Daniel Spencer
-# GitHub Username: Spencer-Daniel5650
-# Date: 2/21/2024
-# Description:The code implements a recursive LinkedList class with methods
-# for manipulation and conversion to a Python list
-
 class Node:
     """A Node class for LinkedList that stores data and a reference to the next node."""
     def __init__(self, data):
@@ -64,13 +58,13 @@ class LinkedList:
         """Insert value at the specified index in the list recursively."""
         if current is None:
             current = self.__head
-            if index == 0:
+            if index == 0 or not current:
                 new_node = Node(value)
                 new_node.next = current
                 self.__head = new_node
                 return
         else:
-            if counter + 1 == index:
+            if counter + 1 == index or not current.next:
                 new_node = Node(value)
                 new_node.next = current.next
                 current.next = new_node
@@ -98,6 +92,4 @@ class LinkedList:
             return []
         else:
             return [current.data] + self.to_plain_list(current.next)
-
-
 
