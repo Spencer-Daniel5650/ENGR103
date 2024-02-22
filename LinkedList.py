@@ -1,7 +1,8 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
-# Date: 2/13/2024
-# Description:
+# Date: 2/21/2024
+# Description:The code implements a recursive LinkedList class with methods
+# for manipulation and conversion to a Python list
 
 class LinkedList:
     class Node:
