@@ -99,3 +99,5 @@ class LinkedList:
         else:
             return [current.data] + self.to_plain_list(current.next)
 
+
+
