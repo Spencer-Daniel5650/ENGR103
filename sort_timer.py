@@ -3,7 +3,7 @@
 # Date: 2/27/2024
 # Description:
 
-√import time
+import time
 import random
 from functools import wraps
 from matplotlib import pyplot as plt
