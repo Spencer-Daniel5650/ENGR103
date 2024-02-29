@@ -1,7 +1,7 @@
 # Author: Daniel Spencer
 # GitHub Username: Spencer-Daniel5650
 # Date: 2/27/2024
-# Description:
+# Description: Defines and compares the performance of two sorting algorithms
 
 import time
 import random
