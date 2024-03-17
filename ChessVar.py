@@ -69,19 +69,56 @@ class ChessVar:
         if moving_piece == 'p':
             return self.__is_valid_pawn_move(col_from, row_from, col_to, row_to, dir_col, dir_row, dist)
         elif moving_piece in 'rnkbq':
-            if self.__is_valid_piece_move(moving_piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
-                return self.__is_path_clear(col_from, row_from, col_to, row_to, moving_piece)
-            return False
+            return self.__is_valid_piece_move(moving_piece, col_from, row_from, col_to, row_to, dir_col, dir_row,
+                                              dist) and self.__is_path_clear(col_from, row_from, col_to, row_to)
         elif moving_piece in 'fh':
             return self.__is_valid_fairy_piece_move(moving_piece, col_from, row_from, col_to, row_to, dir_col, dir_row)
         else:
             return False
 
-    # Implement __is_valid_pawn_move, __is_valid_piece_move, __is_valid_fairy_piece_move as previously described
+    def __is_valid_pawn_move(self, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
+        initial_row = 6 if self.__turn == 'white' else 1
+        move_direction = 1 if self.__turn == 'white' else -1
+        if col_from == col_to:  # Forward move
+            if (row_from + move_direction == row_to and self.__board[row_to][col_to] == '.') or \
+                    (row_from == initial_row and row_from + 2 * move_direction == row_to and self.__board[row_to][
+                        col_to] == '.' and self.__board[row_from + move_direction][col_to] == '.'):
+                return True
+        elif abs(col_from - col_to) == 1 and row_from + move_direction == row_to:  # Diagonal capture
+            target_piece = self.__board[row_to][col_to]
+            if target_piece != '.' and target_piece.isupper() != (self.__turn == 'white'):
+                return True
+        return False
 
-    def __is_path_clear(self, col_from, row_from, col_to, row_to, piece):
-        if piece in ['n', 'p']:  # Knights and pawns don't need path clearance
+    def __is_valid_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
+        if piece == 'k' and dist == 1:  # King
             return True
+        elif piece == 'q' and (dir_col == 0 or dir_row == 0 or abs(dir_col) == abs(dir_row)):  # Queen
+            return True
+        elif piece == 'r' and (dir_col == 0 or dir_row == 0):  # Rook
+            return True
+        elif piece == 'b' and abs(dir_col) == abs(dir_row):  # Bishop
+            return True
+        elif piece == 'n' and (
+                (abs(dir_col) == 2 and abs(dir_row) == 1) or (abs(dir_col) == 1 and abs(dir_row) == 2)):  # Knight
+            return True
+        return False
+
+    def __is_valid_fairy_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row):
+        forward_move = dir_row > 0 if self.__turn == 'white' else dir_row < 0
+        if piece in ['f', 'F']:  # Falcon
+            if forward_move:  # Moves like a bishop
+                return abs(dir_col) == abs(dir_row)
+            else:  # Moves like a rook
+                return dir_col == 0 or dir_row == 0
+        elif piece in ['h', 'H']:  # Hunter
+            if forward_move:  # Moves like a rook
+                return dir_col == 0 or dir_row == 0
+            else:  # Moves like a bishop
+                return abs(dir_col) == abs(dir_row)
+        return False
+
+    def __is_path_clear(self, col_from, row_from, col_to, row_to):
         dir_col = (col_to - col_from) // max(abs(col_to - col_from), 1)
         dir_row = (row_to - row_from) // max(abs(row_to - row_from), 1)
 
@@ -93,8 +130,29 @@ class ChessVar:
             cur_row += dir_row
         return True
 
+    def __handle_capture(self, col, row, moving_piece):
+        captured_piece = self.__board[row][col]
+        if captured_piece != '.':
+            player = 'white' if captured_piece.islower() else 'black'
+            self.__lost_pieces[player].append(captured_piece)
+            # Check if capturing enables a fairy piece entry
+            if captured_piece.lower() in ['q', 'r', 'b', 'n']:  # Major pieces
+                self.__update_eligible_fairy_pieces(player, captured_piece)
+
+    def __update_game_state(self):
+        white_king_present = black_king_present = False
+        for row in self.__board:
+            if 'K' in row:
+                white_king_present = True
+            if 'k' in row:
+                black_king_present = True
+
+        if not white_king_present:
+            self.__game_state = 'BLACK_WON'
+        elif not black_king_present:
+            self.__game_state = 'WHITE_WON'
+        else:
+            self.__game_state = 'UNFINISHED'
+
     def __toggle_turn(self):
         self.__turn = 'black' if self.__turn == 'white' else 'white'
-
-    # Placeholder for the other methods (__is_valid_pawn_move, __is_valid_piece_move, __is_valid_fairy_piece_move)
-    # as described previously. Add those method implementations here to complete the class.
