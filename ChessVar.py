@@ -80,7 +80,8 @@ class ChessVar:
         initial_row = 6 if self.__turn == 'white' else 1
         move_direction = 1 if self.__turn == 'white' else -1
         if col_from == col_to and self.__board[row_to][col_to] == '.':
-            if (dist == 1 and dir_row == move_direction) or (dist == 2 and row_from == initial_row and self.__board[row_from + move_direction][col_to] == '.'):
+            if (dist == 1 and dir_row == move_direction) or \
+               (dist == 2 and row_from == initial_row and self.__board[row_from + move_direction][col_to] == '.'):
                 return True
         elif abs(dir_col) == 1 and dir_row == move_direction and dist == 1 and self.__board[row_to][col_to] != '.':
             return True
@@ -125,9 +126,6 @@ class ChessVar:
         if captured_piece != '.':
             player = 'white' if captured_piece.islower() else 'black'
             self.__lost_pieces[player].append(captured_piece)
-            # Check if capturing enables a fairy piece entry
-            if captured_piece.lower() in ['q', 'r', 'b', 'n']:  # Major pieces
-                # Implement rules for updating eligible fairy pieces
 
     def __update_game_state(self):
         white_king_present = any('K' in row for row in self.__board)
@@ -136,6 +134,8 @@ class ChessVar:
             self.__game_state = 'BLACK_WON'
         elif not black_king_present:
             self.__game_state = 'WHITE_WON'
+        else:
+            self.__game_state = 'UNFINISHED'
 
     def __toggle_turn(self):
         self.__turn = 'black' if self.__turn == 'white' else 'white'
