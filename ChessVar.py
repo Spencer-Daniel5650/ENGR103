@@ -1,3 +1,8 @@
+# Author: Daniel Spencer
+# GitHub Username: Spencer-Daniel5650
+# Date: 03/7/2024
+# Description:
+
 
 class ChessPiece:
     """
@@ -322,6 +327,45 @@ class Queen(ChessPiece):
             return True
         else:
             return False
+
+
+
+class Hunter(ChessPiece):
+    def __init__(self, color):
+        super().__init__(color)
+        self._type = 'HUNTER'
+        self._name = color[0] + 'H'  # 'H' for Hunter, prefixed by 'W' or 'B' for color
+
+    def legal_move(self, source, destination):
+        source_column = ord(source[0])
+        source_row = int(source[1])
+        destination_column = ord(destination[0])
+        destination_row = int(destination[1])
+
+        # Hunter moves two squares diagonally
+        if abs(destination_row - source_row) == 2 and abs(destination_column - source_column) == 2:
+            return True
+        return False
+
+class Falcon(ChessPiece):
+    def __init__(self, color):
+        super().__init__(color)
+        self._type = 'FALCON'
+        self._name = color[0] + 'F'  # 'F' for Falcon, prefixed by 'W' or 'B' for color
+
+    def legal_move(self, source, destination):
+        source_column = ord(source[0])
+        source_row = int(source[1])
+        destination_column = ord(destination[0])
+        destination_row = int(destination[1])
+
+        # Falcon moves like a knight or 2 squares vertically/horizontally
+        if (abs(destination_row - source_row) == 2 and abs(destination_column - source_column) == 1) or \
+           (abs(destination_row - source_row) == 1 and abs(destination_column - source_column) == 2) or \
+           (abs(destination_row - source_row) == 2 and destination_column == source_column) or \
+           (destination_row == source_row and abs(destination_column - source_column) == 2):
+            return True
+        return False
 
 
 class King(ChessPiece):
@@ -747,6 +791,29 @@ class ChessVar:
             for square in range(1, source_row - destination_row):
                 if self._chessboard[chr(source_column + square) + str(source_row - square)]:
                     return False
+            return True
+
+        def enter_fairy_piece(self, piece_type, position):
+            if self._game_state != 'UNFINISHED':
+                return False
+
+            if position not in self._chessboard or self._chessboard[position] is not None:
+                return False
+
+            color = 'WHITE' if piece_type.isupper() else 'BLACK'
+            if (self._player_turn == 'WHITE' and color != 'WHITE') or (
+                    self._player_turn == 'BLACK' and color != 'BLACK'):
+                return False
+
+            if piece_type.upper() == 'H':
+                self._chessboard[position] = Hunter(color)
+            elif piece_type.upper() == 'F':
+                self._chessboard[position] = Falcon(color)
+            else:
+                return False
+
+            self.update_piece_inventory()
+            self.swap_player_turn()
             return True
 
         # Diagonal move backward left (8 to 1) and (h to a)
