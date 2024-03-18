@@ -78,13 +78,16 @@ class ChessVar:
 
     def __is_valid_pawn_move(self, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
         initial_row = 6 if self.__turn == 'white' else 1
-        move_direction = 1 if self.__turn == 'white' else -1
-        if col_from == col_to and self.__board[row_to][col_to] == '.':
-            if (dist == 1 and dir_row == move_direction) or \
-               (dist == 2 and row_from == initial_row and self.__board[row_from + move_direction][col_to] == '.'):
+        move_direction = -1 if self.__turn == 'white' else 1  # Corrected direction
+        if col_from == col_to:  # Moving straight
+            if self.__board[row_to][col_to] == '.':
+                if row_from == initial_row and dist == 2 and self.__board[row_from + move_direction][col_to] == '.':
+                    return True  # Initial two-square move
+                if dist == 1 and dir_row == move_direction:
+                    return True  # Normal one-square move
+        elif abs(dir_col) == 1 and dist == 1 and dir_row == move_direction:  # Diagonal capture
+            if self.__board[row_to][col_to] != '.' and self.__board[row_to][col_to].isupper() != (self.__turn == 'white'):
                 return True
-        elif abs(dir_col) == 1 and dir_row == move_direction and dist == 1 and self.__board[row_to][col_to] != '.':
-            return True
         return False
 
     def __is_valid_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
@@ -100,13 +103,18 @@ class ChessVar:
             return True
         return False
 
-    def __is_valid_fairy_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row):
-        forward_move = dir_row > 0 if self.__turn == 'white' else dir_row < 0
-        if piece.lower() == 'f':
-            if forward_move and abs(dir_col) == abs(dir_row) or not forward_move and (dir_col == 0 or dir_row == 0):
-                return True
-        elif piece.lower() == 'h':
-            if forward_move and (dir_col == 0 or dir_row == 0) or not forward_move and abs(dir_col) == abs(dir_row):
+    def __is_valid_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
+        if piece == 'r':  # Rook
+            if dir_col == 0 or dir_row == 0:
+                return self.__is_path_clear(col_from, row_from, col_to, row_to)
+        elif piece == 'b':  # Bishop
+            if abs(dir_col) == abs(dir_row):
+                return self.__is_path_clear(col_from, row_from, col_to, row_to)
+        elif piece == 'q':  # Queen
+            if dir_col == 0 or dir_row == 0 or abs(dir_col) == abs(dir_row):
+                return self.__is_path_clear(col_from, row_from, col_to, row_to)
+        elif piece == 'k':  # King
+            if dist == 1:
                 return True
         return False
 
@@ -126,10 +134,11 @@ class ChessVar:
         if captured_piece != '.':
             player = 'white' if captured_piece.islower() else 'black'
             self.__lost_pieces[player].append(captured_piece)
+            self.__update_game_state()  # Ensure this is called to check for king capture.
 
     def __update_game_state(self):
-        white_king_present = any('K' in row for row in self.__board)
-        black_king_present = any('k' in row for row in self.__board)
+        white_king_present = any('K' in ''.join(row) for row in self.__board)
+        black_king_present = any('k' in ''.join(row) for row in self.__board)
         if not white_king_present:
             self.__game_state = 'BLACK_WON'
         elif not black_king_present:
@@ -137,5 +146,3 @@ class ChessVar:
         else:
             self.__game_state = 'UNFINISHED'
 
-    def __toggle_turn(self):
-        self.__turn = 'black' if self.__turn == 'white' else 'white'
