@@ -76,39 +76,63 @@ class ChessVar:
 
     def __is_valid_pawn_move(self, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
         initial_row = 6 if self.__turn == 'white' else 1
+        target_row = 4 if self.__turn == 'white' else 3  # Corrected target rows for two-square moves
+        move_direction = 1 if self.__turn == 'white' else -1
+        if col_from == col_to:
+            # Handle the two-square move
+            if row_from == initial_row and row_to == target_row and self.__board[row_to][col_to] == '.' and \
+                    self.__board[row_from + move_direction][col_to] == '.':
+                return True
+            # Handle the one-square move
+            elif dist == 1 and dir_row == move_direction and self.__board[row_to][col_to] == '.':
+                return True
+        elif abs(dir_col) == 1 and dir_row == move_direction and dist == 1:
+            # Diagonal capture
+            if self.__board[row_to][col_to] != '.' and self.__board[row_to][col_to].isupper() != (
+                    self.__turn == 'white'):
+                return True
+        return False
+
+    def __is_valid_move(self, col_from, row_from, col_to, row_to):
+        moving_piece = self.__board[row_from][col_from].lower()
+        dir_col = col_to - col_from
+        dir_row = row_to - row_from
+        dist = max(abs(dir_col), abs(dir_row))
+
+        if moving_piece == 'p':
+            return self.__is_valid_pawn_move(col_from, row_from, col_to, row_to, dir_col, dir_row, dist)
+        elif moving_piece in ['r', 'n', 'b', 'q', 'k']:
+            return self.__is_valid_piece_move(moving_piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist)
+        return False
+
+    def __is_valid_pawn_move(self, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
+        initial_row = 6 if self.__turn == 'white' else 1
         move_direction = 1 if self.__turn == 'white' else -1
         # Straight move
-        if col_from == col_to and self.__board[row_to][col_to] == '.':
-            if row_from == initial_row and dist == 2 and self.__board[row_from + move_direction][col_to] == '.':
+        if col_from == col_to:
+            if row_from == initial_row and dist == 2 and self.__board[row_from + move_direction][col_to] == '.' and \
+                    self.__board[row_to][col_to] == '.':
                 return True  # Initial two-square move
-            elif dist == 1 and dir_row == move_direction:
+            elif dist == 1 and dir_row == move_direction and self.__board[row_to][col_to] == '.':
                 return True  # Normal one-square move
         # Capture move
-        elif abs(dir_col) == 1 and dir_row == move_direction and dist == 1 and self.__board[row_to][col_to] != '.':
+        elif abs(dir_col) == 1 and dist == 1 and dir_row == move_direction and self.__board[row_to][col_to] != '.' and \
+                self.__board[row_to][col_to].isupper() != (self.__turn == 'white'):
             return True
         return False
 
     def __is_valid_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
-        if piece == 'r':  # Rook moves
-            if dir_col == 0 or dir_row == 0:
-                return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'b':  # Bishop moves
-            if abs(dir_col) == abs(dir_row):
-                return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'q':  # Queen moves
-            if dir_col == 0 or dir_row == 0 or abs(dir_col) == abs(dir_row):
-                return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'k':  # King moves
-            if dist == 1:
-                return True
-        elif piece == 'n':  # Knight moves
-            if (abs(dir_col) == 2 and abs(dir_row) == 1) or (abs(dir_col) == 1 and abs(dir_row) == 2):
-                return True
-        return False
-
-    def __is_valid_fairy_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row):
-        # Assuming Falcon ('f' or 'F') and Hunter ('h' or 'H') have special rules
-        # Implement the fairy piece-specific rules here, similar to the example for standard pieces
+        if piece == 'r' and (dir_col == 0 or dir_row == 0):  # Rook moves
+            return self.__is_path_clear(col_from, row_from, col_to, row_to)
+        elif piece == 'b' and abs(dir_col) == abs(dir_row):  # Bishop moves
+            return self.__is_path_clear(col_from, row_from, col_to, row_to)
+        elif piece == 'q' and (dir_col == 0 or dir_row == 0 or abs(dir_col) == abs(dir_row)):  # Queen moves
+            return self.__is_path_clear(col_from, row_from, col_to, row_to)
+        elif piece == 'k' and dist == 1:  # King moves
+            return True
+        elif piece == 'n' and (
+                (abs(dir_col) == 2 and abs(dir_row) == 1) or (abs(dir_col) == 1 and abs(dir_row) == 2)):  # Knight moves
+            return True
         return False
 
     def __is_path_clear(self, col_from, row_from, col_to, row_to):
