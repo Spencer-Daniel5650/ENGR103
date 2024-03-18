@@ -39,7 +39,6 @@ class ChessVar:
         self.__handle_capture(col_to, row_to, moving_piece)
         self.__board[row_to][col_to] = moving_piece
         self.__board[row_from][col_from] = '.'
-
         self.__update_game_state()
         self.__toggle_turn()
         return True
@@ -69,64 +68,58 @@ class ChessVar:
 
         if moving_piece == 'p':
             return self.__is_valid_pawn_move(col_from, row_from, col_to, row_to, dir_col, dir_row, dist)
-        elif moving_piece in 'rnkbq':
+        elif moving_piece in ['r', 'n', 'b', 'q', 'k']:
             return self.__is_valid_piece_move(moving_piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist)
-        elif moving_piece in 'fh':
+        elif moving_piece in ['f', 'h']:
             return self.__is_valid_fairy_piece_move(moving_piece, col_from, row_from, col_to, row_to, dir_col, dir_row)
-        else:
-            return False
+        return False
 
     def __is_valid_pawn_move(self, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
         initial_row = 6 if self.__turn == 'white' else 1
-        move_direction = -1 if self.__turn == 'white' else 1  # Corrected direction
-        if col_from == col_to:  # Moving straight
-            if self.__board[row_to][col_to] == '.':
-                if row_from == initial_row and dist == 2 and self.__board[row_from + move_direction][col_to] == '.':
-                    return True  # Initial two-square move
-                if dist == 1 and dir_row == move_direction:
-                    return True  # Normal one-square move
-        elif abs(dir_col) == 1 and dist == 1 and dir_row == move_direction:  # Diagonal capture
-            if self.__board[row_to][col_to] != '.' and self.__board[row_to][col_to].isupper() != (self.__turn == 'white'):
-                return True
-        return False
-
-    def __is_valid_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
-        if piece == 'r' and (dir_col == 0 or dir_row == 0):
-            return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'b' and abs(dir_col) == abs(dir_row):
-            return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'n' and ((abs(dir_col) == 2 and abs(dir_row) == 1) or (abs(dir_col) == 1 and abs(dir_row) == 2)):
-            return True
-        elif piece == 'q' and (dir_col == 0 or dir_row == 0 or abs(dir_col) == abs(dir_row)):
-            return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'k' and max(abs(dir_col), abs(dir_row)) == 1:
+        move_direction = 1 if self.__turn == 'white' else -1
+        # Straight move
+        if col_from == col_to and self.__board[row_to][col_to] == '.':
+            if row_from == initial_row and dist == 2 and self.__board[row_from + move_direction][col_to] == '.':
+                return True  # Initial two-square move
+            elif dist == 1 and dir_row == move_direction:
+                return True  # Normal one-square move
+        # Capture move
+        elif abs(dir_col) == 1 and dir_row == move_direction and dist == 1 and self.__board[row_to][col_to] != '.':
             return True
         return False
 
     def __is_valid_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row, dist):
-        if piece == 'r':  # Rook
+        if piece == 'r':  # Rook moves
             if dir_col == 0 or dir_row == 0:
                 return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'b':  # Bishop
+        elif piece == 'b':  # Bishop moves
             if abs(dir_col) == abs(dir_row):
                 return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'q':  # Queen
+        elif piece == 'q':  # Queen moves
             if dir_col == 0 or dir_row == 0 or abs(dir_col) == abs(dir_row):
                 return self.__is_path_clear(col_from, row_from, col_to, row_to)
-        elif piece == 'k':  # King
+        elif piece == 'k':  # King moves
             if dist == 1:
                 return True
+        elif piece == 'n':  # Knight moves
+            if (abs(dir_col) == 2 and abs(dir_row) == 1) or (abs(dir_col) == 1 and abs(dir_row) == 2):
+                return True
+        return False
+
+    def __is_valid_fairy_piece_move(self, piece, col_from, row_from, col_to, row_to, dir_col, dir_row):
+        # Assuming Falcon ('f' or 'F') and Hunter ('h' or 'H') have special rules
+        # Implement the fairy piece-specific rules here, similar to the example for standard pieces
         return False
 
     def __is_path_clear(self, col_from, row_from, col_to, row_to):
-        dir_col = 1 if col_to > col_from else -1 if col_to < col_from else 0
-        dir_row = 1 if row_to > row_from else -1 if row_to < row_from else 0
-        cur_col, cur_row = col_from + dir_col, row_from + dir_row
+        step_col = 1 if col_to > col_from else -1 if col_to < col_from else 0
+        step_row = 1 if row_to > row_from else -1 if row_to < row_from else 0
+        cur_col, cur_row = col_from + step_col, row_from + step_row
         while (cur_col, cur_row) != (col_to, row_to):
             if self.__board[cur_row][cur_col] != '.':
                 return False
-            cur_col += dir_col
-            cur_row += dir_row
+            cur_col += step_col
+            cur_row += step_row
         return True
 
     def __handle_capture(self, col, row, moving_piece):
@@ -134,7 +127,6 @@ class ChessVar:
         if captured_piece != '.':
             player = 'white' if captured_piece.islower() else 'black'
             self.__lost_pieces[player].append(captured_piece)
-            self.__update_game_state()  # Ensure this is called to check for king capture.
 
     def __update_game_state(self):
         white_king_present = any('K' in ''.join(row) for row in self.__board)
@@ -146,3 +138,5 @@ class ChessVar:
         else:
             self.__game_state = 'UNFINISHED'
 
+    def __toggle_turn(self):
+        self.__turn = 'black' if self.__turn == 'white' else 'white'
